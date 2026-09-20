@@ -13,11 +13,16 @@ class InvalidAgeError(ValueError):
 
 # class A:B{}
 
+def demo(): 
+    pass
+
 def validate(age):
     if age<0:
         raise InvalidAgeError("age can not be be negative")
         # throw
 try:
+
+    demo()
     validate(10)
     validate(-10)
     print("age is successfully validated")
