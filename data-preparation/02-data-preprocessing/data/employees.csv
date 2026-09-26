@@ -1,0 +1,7 @@
+age,salary,experience,city,education,bought
+25,30000,2,Delhi,Bachelor,No
+30,,5,Mumbai,Master,Yes
+,50000,7,Delhi,Bachelor,No
+40,60000,12,Chennai,PhD,Yes
+35,45000,8,,Master,Yes
+28,38000,4,Mumbai,Bachelor,No

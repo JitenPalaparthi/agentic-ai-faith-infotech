@@ -1,0 +1,9 @@
+customer_id,age,annual_salary,years_experience,city,education,signup_date,last_purchase_date,total_spend,num_orders,website_visits,review_text,bought
+C001,25,360000,2,Hyderabad,Bachelor,2024-01-10,2025-01-01,18000,6,20,good product,0
+C002,35,900000,10,Mumbai,Master,2023-03-15,2025-05-15,120000,24,80,excellent service and product,1
+C003,45,1500000,20,Bengaluru,PhD,2022-06-01,2025-07-01,300000,40,110,very good quality,1
+C004,28,600000,5,Chennai,Bachelor,2024-09-20,2025-02-10,35000,10,35,average experience,0
+C005,52,2400000,28,Hyderabad,Master,2021-01-05,2025-08-12,650000,70,150,excellent premium product,1
+C006,31,720000,7,Pune,Bachelor,2023-11-11,2025-04-21,76000,18,65,good value for money,1
+C007,23,420000,1,Mumbai,Bachelor,2025-01-01,2025-03-03,12000,4,18,not bad,0
+C008,39,1100000,14,Delhi,Master,2022-12-12,2025-06-30,190000,30,95,excellent quality and support,1
