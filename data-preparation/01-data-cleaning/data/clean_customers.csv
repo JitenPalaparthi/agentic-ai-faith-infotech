@@ -1,0 +1,9 @@
+customer_id,name,age,email,city,salary,join_date,status,email_valid
+C001,Jiten,40.0,jiten@example.com,Hyderabad,90000.0,2024-01-10,active,True
+C002,Ravi,35.0,ravi@example.com,Hyderabad,75000.0,2024-10-02,active,True
+C003,Sita,,sita@example.com,Bengaluru,82000.0,2024-03-15,active,True
+C004,Anil,,not-an-email,Chennai,70000.0,,inactive,False
+C005,Meena,29.0,meena@example.com,Bengaluru,9999999.0,2024-05-20,active,True
+C006,Raju,,raju@example.com,,65000.0,2024-06-01,inactive,True
+C007,Priya,31.0,,Mumbai,,2024-07-12,active,False
+C008,Kumar,45.0,kumar@example.com,Chennai,85000.0,2024-08-01,,True

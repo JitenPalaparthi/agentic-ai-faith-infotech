@@ -11,7 +11,9 @@ df["city"] = df["city"].str.strip().str.title()
 
 # Then apply known canonical mappings.
 city_map = {
-    "Bangalore": "Bengaluru"
+    "Bangalore": "Bengaluru",
+    "hyderabad":"Hydrabad",
+    "chennai":"Chennai",
 }
 df["city"] = df["city"].replace(city_map)
 

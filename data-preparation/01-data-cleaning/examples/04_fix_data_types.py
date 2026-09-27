@@ -7,7 +7,7 @@ print("Before:")
 print(df.dtypes)
 
 # Invalid numeric tokens become NaN rather than crashing.
-df["age"] = pd.to_numeric(df["age"], errors="coerce")
+df["age"] = pd.to_numeric(df["age"], errors="coerce") # raise, ignore, coerce
 df["salary"] = pd.to_numeric(df["salary"], errors="coerce")
 
 print("\nAfter numeric conversion:")

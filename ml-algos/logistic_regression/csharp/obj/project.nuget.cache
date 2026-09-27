@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "kHxDnTePkPU=",
+  "success": true,
+  "projectFilePath": "/Users/jiten/workspace/training/agentic-ai-from-basics-agents/ml-algos/logistic_regression_bundle/csharp/LogisticInference.csproj",
+  "expectedPackageFiles": [
+    "/Users/jiten/.nuget/packages/microsoft.ml.onnxruntime/1.23.2/microsoft.ml.onnxruntime.1.23.2.nupkg.sha512",
+    "/Users/jiten/.nuget/packages/microsoft.ml.onnxruntime.managed/1.23.2/microsoft.ml.onnxruntime.managed.1.23.2.nupkg.sha512",
+    "/Users/jiten/.nuget/packages/system.memory/4.5.5/system.memory.4.5.5.nupkg.sha512",
+    "/Users/jiten/.nuget/packages/system.numerics.tensors/9.0.0/system.numerics.tensors.9.0.0.nupkg.sha512",
+    "/Users/jiten/.nuget/packages/microsoft.netcore.app.ref/8.0.28/microsoft.netcore.app.ref.8.0.28.nupkg.sha512",
+    "/Users/jiten/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.28/microsoft.aspnetcore.app.ref.8.0.28.nupkg.sha512",
+    "/Users/jiten/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.28/microsoft.netcore.app.host.osx-arm64.8.0.28.nupkg.sha512"
+  ],
+  "logs": []
+}

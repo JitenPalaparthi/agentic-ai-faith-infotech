@@ -1,0 +1,29 @@
+{
+  "records": 12000,
+  "train_records": 9600,
+  "test_records": 2400,
+  "positive_rate": 0.4474166666666667,
+  "accuracy": 0.77125,
+  "precision": 0.7638190954773869,
+  "recall": 0.707635009310987,
+  "f1": 0.7346544224262929,
+  "roc_auc": 0.8585467276725903,
+  "log_loss": 0.4639830761584985,
+  "confusion_matrix": [
+    [
+      1091,
+      235
+    ],
+    [
+      314,
+      760
+    ]
+  ],
+  "features": [
+    "annual_income_lakh",
+    "credit_score",
+    "debt_ratio",
+    "employment_years",
+    "loan_amount_lakh"
+  ]
+}

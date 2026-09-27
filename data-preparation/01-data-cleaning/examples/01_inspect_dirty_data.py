@@ -4,6 +4,8 @@ import pandas as pd
 df = pd.read_csv("data/dirty_customers.csv")
 
 print("FIRST ROWS")
+pd.set_option("display.max_columns", None)
+print(df.head())
 print(df.head())
 
 print("\nSHAPE:", df.shape)

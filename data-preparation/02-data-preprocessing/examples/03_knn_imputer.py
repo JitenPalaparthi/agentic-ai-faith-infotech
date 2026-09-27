@@ -8,9 +8,9 @@ import pandas as pd
 from sklearn.impute import KNNImputer
 
 df = pd.DataFrame({
-    "age": [25, 26, 27, 48],
-    "experience": [2, 3, 3, 25],
-    "salary": [30000, 32000, np.nan, 120000]
+    "age": [25, 26, 27, 48,48],
+    "experience": [2, 3, 3, 25,25],
+    "salary": [30000, 32000, np.nan, 120000,np.nan]
 })
 print("Before:\n", df)
 
