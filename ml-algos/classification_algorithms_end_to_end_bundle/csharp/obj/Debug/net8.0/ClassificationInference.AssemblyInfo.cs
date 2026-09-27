@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ClassificationInference")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6f29114eeb0068d002b18dac5a59201762e47769")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a374a874270383f27fb370f5775d2789e990cc88")]
 [assembly: System.Reflection.AssemblyProductAttribute("ClassificationInference")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ClassificationInference")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -210,11 +210,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/jiten/workspace/training/agentic-ai-from-basics-agents/ml-algos/linear_regression_bundle/csharp/LinearRegressionInference.csproj",
+      "projectUniqueName": "/Users/jiten/workspace/training/agentic-ai-from-basics-agents/ml-algos/linear_regression/csharp/LinearRegressionInference.csproj",
       "projectName": "LinearRegressionInference",
-      "projectPath": "/Users/jiten/workspace/training/agentic-ai-from-basics-agents/ml-algos/linear_regression_bundle/csharp/LinearRegressionInference.csproj",
+      "projectPath": "/Users/jiten/workspace/training/agentic-ai-from-basics-agents/ml-algos/linear_regression/csharp/LinearRegressionInference.csproj",
       "packagesPath": "/Users/jiten/.nuget/packages/",
-      "outputPath": "/Users/jiten/workspace/training/agentic-ai-from-basics-agents/ml-algos/linear_regression_bundle/csharp/obj/",
+      "outputPath": "/Users/jiten/workspace/training/agentic-ai-from-basics-agents/ml-algos/linear_regression/csharp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/jiten/.nuget/NuGet/NuGet.Config"

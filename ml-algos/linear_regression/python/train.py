@@ -20,11 +20,14 @@ X_train, X_test, y_train, y_test = train_test_split(
 model = LinearRegression()
 
 model.fit(X_train, y_train)
+
 pred = model.predict(X_test)
+
 print("Intercept:", model.intercept_)
 print("Coefficients:", dict(zip(features, model.coef_)))
 print("RMSE:", mean_squared_error(y_test, pred) ** 0.5)
 print("R2:", r2_score(y_test, pred))
+
 with open("../linear_regression_model.pkl", "wb") as f:
     pickle.dump(model, f)
 

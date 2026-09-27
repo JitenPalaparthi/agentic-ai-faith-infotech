@@ -19,7 +19,7 @@ model = Pipeline(
     ]
 )
 model.fit(X_train, y_train)
-probability = model.predict_proba(X_test)[:, 1]
+probability = model.predict_proba(X_test)[:, 1] # sigmoid output 0-1
 prediction = (probability >= 0.50).astype(int)
 print(classification_report(y_test, prediction))
 print("Confusion matrix:\n", confusion_matrix(y_test, prediction))
