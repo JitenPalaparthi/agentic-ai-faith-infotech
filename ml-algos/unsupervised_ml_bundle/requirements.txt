@@ -1,0 +1,1 @@
+numpy>=1.26\npandas>=2.0\nscikit-learn>=1.4\njoblib>=1.3\nmatplotlib>=3.8\nskl2onnx>=1.16\nonnx>=1.15\nonnxruntime>=1.17\n

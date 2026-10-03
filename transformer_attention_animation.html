@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Transformer: Tokenization → Prediction</title>
+<style>
+:root{--bg:#07111f;--panel:#0e1b2d;--panel2:#12243a;--text:#eaf2ff;--muted:#9fb1ca;--cyan:#49d6ff;--purple:#b38cff;--green:#69e6a6;--yellow:#ffd166;--red:#ff7185;--line:#29415f}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 30% 0,#132a46,#07111f 55%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:22px 28px 12px;display:flex;gap:18px;align-items:flex-end;justify-content:space-between}
+h1{font-size:clamp(22px,3vw,38px);margin:0}.sub{color:var(--muted);margin-top:5px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+button,select{background:#152a43;color:white;border:1px solid #315070;border-radius:10px;padding:9px 13px;font-weight:700;cursor:pointer}
+button:hover{border-color:var(--cyan)} button.primary{background:#167fa1}
+.progress{height:5px;background:#14243a}.bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:width .45s}
+main{display:grid;grid-template-columns:260px 1fr;gap:18px;padding:18px 28px 30px}
+.steps{background:rgba(14,27,45,.75);border:1px solid var(--line);border-radius:16px;padding:10px;height:fit-content}
+.step{padding:10px;border-radius:10px;color:#8fa5c1;font-size:13px}.step.active{background:#18314e;color:white;border-left:3px solid var(--cyan)}.step.done{color:#c7d5e7}
+.stage{min-height:650px;background:rgba(14,27,45,.7);border:1px solid var(--line);border-radius:18px;padding:24px;position:relative;overflow:hidden}
+.kicker{color:var(--cyan);font-weight:800;text-transform:uppercase;letter-spacing:.13em;font-size:12px}
+h2{font-size:30px;margin:7px 0 6px}.explain{color:#bed0e6;font-size:17px;max-width:950px;line-height:1.55}
+.scene{margin-top:28px;min-height:400px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:22px}
+.row{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.box,.token,.matrix,.prob{border:1px solid #345372;background:#11243a;border-radius:12px;padding:14px 18px;box-shadow:0 8px 30px #0004}
+.token{font-size:20px;font-weight:800;animation:pop .45s both}.arrow{font-size:28px;color:var(--cyan);animation:pulse 1s infinite}
+.formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#091522;border:1px solid #27425f;padding:15px 20px;border-radius:12px;font-size:20px}
+.matrix{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;line-height:1.7;color:#dcecff}
+.q{border-color:#3cc8ff}.k{border-color:#b38cff}.v{border-color:#69e6a6}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#91a7c4;margin-bottom:7px}
+.attn-grid{display:grid;grid-template-columns:100px repeat(4,72px);gap:6px;align-items:center;text-align:center}
+.cell{padding:13px 6px;border-radius:8px;background:#142943;border:1px solid #294766}.hot1{background:#17324c}.hot2{background:#17425a}.hot3{background:#15586c}.hot4{background:#11748b}
+.mask{background:#351c29;color:#ff9bac}.prob{width:390px;padding:12px}.probline{display:grid;grid-template-columns:80px 1fr 55px;gap:10px;align-items:center;margin:9px 0}.track{height:12px;background:#20344c;border-radius:20px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));animation:grow .8s both}
+.note{background:#102b32;border:1px solid #24616a;border-radius:12px;padding:12px 16px;color:#bceaf0;max-width:850px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:#aebfd4}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+footer{color:#7890ad;text-align:center;padding:0 20px 20px;font-size:12px}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.92)}to{opacity:1;transform:none}}@keyframes pulse{50%{transform:translateX(5px);opacity:.65}}@keyframes grow{from{width:0}} 
+@media(max-width:850px){main{grid-template-columns:1fr;padding:12px}.steps{display:none}.stage{min-height:720px;padding:18px}header{align-items:flex-start;flex-direction:column}.prob{width:min(390px,90vw)}}
+</style>
+</head>
+<body>
+<header>
+ <div><h1>How a Transformer Predicts the Next Token</h1><div class="sub">Interactive classroom animation — tokenization → attention → prediction</div></div>
+ <div class="controls"><button id="prev">◀ Previous</button><button id="play" class="primary">▶ Play</button><button id="next">Next ▶</button>
+ <select id="speed"><option value="5000">Slow</option><option value="3000" selected>Normal</option><option value="1600">Fast</option></select></div>
+</header>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<main><aside class="steps" id="steps"></aside><section class="stage"><div id="content"></div></section></main>
+<footer>Numbers are intentionally small and illustrative. Real LLMs use much larger vectors, many heads, and many Transformer blocks.</footer>
+<script>
+const steps=[
+["Input text","We start with text. The model cannot directly process words; it ultimately works with numbers.",()=>`
+<div class="scene"><div class="box" style="font-size:34px">“The cat sat on the”</div><div class="arrow">↓</div><div class="note">Goal: predict the <b>next token</b>. We will follow the information all the way through the Transformer.</div></div>`],
+["Tokenization","The tokenizer splits text into tokens. A token may be a whole word, part of a word, punctuation, or another learned text unit.",()=>`
+<div class="scene"><div class="row">${["The","cat","sat","on","the"].map((x,i)=>`<div class="token" style="animation-delay:${i*.12}s">${x}</div>`).join("")}</div><div class="arrow">↓</div><div class="row">${[464,3797,3332,319,262].map(x=>`<div class="box">ID <b>${x}</b></div>`).join("")}</div><div class="note">Tokenizer vocabulary maps each token to an integer ID. These IDs themselves do not contain semantic meaning.</div></div>`],
+["Embeddings","Each token ID indexes an embedding vector. The embedding converts a discrete token into a learned continuous representation.",()=>`
+<div class="scene"><div class="row"><div class="token">cat</div><div class="arrow">→</div><div class="matrix">Embedding X
+[ 0.8, -0.2, 0.5, 0.1 ]</div></div><div class="formula">X = TokenEmbedding + PositionInformation</div><div class="note">The position component lets the model distinguish sequences such as “cat chased dog” from “dog chased cat”.</div></div>`],
+["Q, K and V","The same hidden representation X is projected three different ways using three independently learned parameter matrices.",()=>`
+<div class="scene"><div class="formula">Q = XW<sub>Q</sub> &nbsp;&nbsp; K = XW<sub>K</sub> &nbsp;&nbsp; V = XW<sub>V</sub></div><div class="row"><div class="matrix q">QUERY Q
+[ .7, .1 ]
+“What am I
+looking for?”</div><div class="matrix k">KEY K
+[ .6, .3 ]
+“What do I
+contain?”</div><div class="matrix v">VALUE V
+[ .2, .9 ]
+“What information
+do I provide?”</div></div><div class="note"><b>Important:</b> Q, K and V are not labels assigned to three special kinds of tokens. Every token produces all three. Their matrices learn different values because they participate differently in the attention computation and therefore receive different gradients.</div></div>`],
+["Attention scores","A query is compared with keys using dot products. A larger score means stronger compatibility between that query and key.",()=>`
+<div class="scene"><div class="formula">Scores = QK<sup>T</sup> / √d<sub>k</sub></div><div class="row"><div class="matrix q">Q(the)
+[0.7, 0.1]</div><div class="arrow">×</div><div class="matrix k">K(cat)
+[0.6, 0.3]</div><div class="arrow">=</div><div class="box">0.45</div></div><div class="note">The dot product is a learned compatibility score. Scaling by √d<sub>k</sub> keeps scores numerically well behaved as the key/query dimension grows.</div></div>`],
+["Causal mask","During next-token generation, a position must not look into its future. The causal mask blocks future positions before softmax.",()=>`
+<div class="scene"><div class="attn-grid"><b>Query ↓</b><b>The</b><b>cat</b><b>sat</b><b>on</b>
+<b>The</b><div class="cell hot4">0.8</div><div class="cell mask">−∞</div><div class="cell mask">−∞</div><div class="cell mask">−∞</div>
+<b>cat</b><div class="cell hot2">0.3</div><div class="cell hot4">0.9</div><div class="cell mask">−∞</div><div class="cell mask">−∞</div>
+<b>sat</b><div class="cell hot1">0.1</div><div class="cell hot4">1.2</div><div class="cell hot3">0.6</div><div class="cell mask">−∞</div>
+<b>on</b><div class="cell hot1">0.1</div><div class="cell hot3">0.7</div><div class="cell hot2">0.4</div><div class="cell hot4">1.0</div></div><div class="note">Masked entries become effectively zero after softmax.</div></div>`],
+["Softmax","Softmax converts the permitted attention scores into positive weights that sum to 1.",()=>`
+<div class="scene"><div class="formula">A = softmax(Scores)</div><div class="row"><div class="box">The<br><b>0.08</b></div><div class="box">cat<br><b>0.52</b></div><div class="box">sat<br><b>0.27</b></div><div class="box">on<br><b>0.13</b></div></div><div class="note">For this illustrative query, “cat” receives the strongest attention. Attention weights answer: <b>how much should this position read from each available value?</b></div></div>`],
+["Weighted values","The attention weights are applied to the Value vectors. This creates the context-aware output of the attention head.",()=>`
+<div class="scene"><div class="formula">O = A V = softmax(QK<sup>T</sup>/√d<sub>k</sub>)V</div><div class="row"><div class="box">.08 × V<sub>The</sub></div><b>+</b><div class="box">.52 × V<sub>cat</sub></div><b>+</b><div class="box">.27 × V<sub>sat</sub></div><b>+</b><div class="box">.13 × V<sub>on</sub></div></div><div class="arrow">↓</div><div class="matrix">Attention output O
+[ 0.41, 0.73, -0.12, 0.38 ]</div><div class="note">This is why <b>V</b> is called Value: after Q and K decide the weights, V carries the information that is actually mixed.</div></div>`],
+["Multi-head attention","Transformers run several attention heads in parallel. Each head has its own Q/K/V projections and can learn different relationships.",()=>`
+<div class="scene"><div class="row"><div class="box q">Head 1<br><b>syntax</b></div><div class="box k">Head 2<br><b>reference</b></div><div class="box v">Head 3<br><b>position</b></div><div class="box" style="border-color:#ffd166">Head 4<br><b>other pattern</b></div></div><div class="arrow">↓ concatenate + W<sub>O</sub></div><div class="box">Multi-head attention output</div><div class="note">The labels above are intuition only—not fixed assignments. Heads discover useful patterns during training.</div></div>`],
+["Transformer block","Attention is followed by residual pathways, normalization, and a position-wise feed-forward network (MLP). This transforms the representation further.",()=>`
+<div class="scene"><div class="row"><div class="box">Hidden states</div><div class="arrow">→</div><div class="box q">Attention</div><div class="arrow">→</div><div class="box">Residual + Norm*</div><div class="arrow">→</div><div class="box v">MLP / FFN</div><div class="arrow">→</div><div class="box">Residual + Norm*</div></div><div class="arrow">↓ repeat N layers</div><div class="note">*Exact normalization placement depends on the architecture. Modern decoder-only LLMs commonly use pre-normalization variants.</div></div>`],
+["Vocabulary logits","After the final Transformer layer, the last position's hidden state is projected into one score for every token in the vocabulary.",()=>`
+<div class="scene"><div class="formula">logits = h<sub>last</sub> W<sub>vocab</sub> + b</div><div class="row"><div class="box">h<sub>last</sub><br>[ ... ]</div><div class="arrow">→</div><div class="box">Vocabulary projection</div><div class="arrow">→</div><div class="matrix">mat:  4.2
+floor: 2.8
+table: 1.9
+dog:   0.7
+...</div></div><div class="note">A logit is an unnormalized score—not yet a probability.</div></div>`],
+["Next-token prediction","Softmax converts vocabulary logits into probabilities. A decoding strategy then chooses or samples the next token.",()=>`
+<div class="scene"><div class="prob">
+<div class="probline"><b>mat</b><div class="track"><div class="fill" style="width:62%"></div></div><b>62%</b></div>
+<div class="probline"><b>floor</b><div class="track"><div class="fill" style="width:15%"></div></div><b>15%</b></div>
+<div class="probline"><b>table</b><div class="track"><div class="fill" style="width:8%"></div></div><b>8%</b></div>
+<div class="probline"><b>dog</b><div class="track"><div class="fill" style="width:3%"></div></div><b>3%</b></div></div>
+<div class="row"><div class="box">“The cat sat on the”</div><div class="arrow">→</div><div class="token" style="border-color:#69e6a6">mat</div></div><div class="note">The generated token is appended to the sequence. Then the process runs again to predict the following token. This is <b>autoregressive generation</b>.</div></div>`],
+["Complete picture","The entire inference path can now be viewed as one pipeline.",()=>`
+<div class="scene"><div class="row"><div class="box">Text</div><div class="arrow">→</div><div class="box">Tokens</div><div class="arrow">→</div><div class="box">Embeddings</div><div class="arrow">→</div><div class="box q">Q/K/V</div><div class="arrow">→</div><div class="box k">Attention</div></div>
+<div class="row"><div class="box v">MLP</div><div class="arrow">→</div><div class="box">× N layers</div><div class="arrow">→</div><div class="box">Logits</div><div class="arrow">→</div><div class="box">Softmax</div><div class="arrow">→</div><div class="token">Next token</div></div>
+<div class="formula">Attention(Q,K,V) = softmax(QK<sup>T</sup>/√d<sub>k</sub> + mask)V</div>
+<div class="note"><b>Teaching takeaway:</b> Q asks which information is relevant; K participates in matching; V supplies the information to mix. These roles emerge from where the independently learned projection matrices occur in the computation.</div></div>`]
+];
+let idx=0,timer=null;
+const content=document.getElementById("content"), stepBox=document.getElementById("steps"),bar=document.getElementById("bar"),play=document.getElementById("play");
+function render(){
+ stepBox.innerHTML=steps.map((s,i)=>`<div class="step ${i===idx?'active':i<idx?'done':''}">${String(i+1).padStart(2,'0')} · ${s[0]}</div>`).join("");
+ const s=steps[idx]; content.innerHTML=`<div class="kicker">Step ${idx+1} of ${steps.length}</div><h2>${s[0]}</h2><div class="explain">${s[1]}</div>${s[2]()}`;
+ bar.style.width=((idx+1)/steps.length*100)+"%";
+}
+function next(){idx=(idx+1)%steps.length;render()} function prev(){idx=(idx-1+steps.length)%steps.length;render()}
+function stop(){clearInterval(timer);timer=null;play.textContent="▶ Play"}
+function start(){stop();play.textContent="⏸ Pause";timer=setInterval(next,+document.getElementById("speed").value)}
+document.getElementById("next").onclick=next;document.getElementById("prev").onclick=prev;
+play.onclick=()=>timer?stop():start();document.getElementById("speed").onchange=()=>{if(timer)start()};
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")next();if(e.key==="ArrowLeft")prev();if(e.key===" "){e.preventDefault();timer?stop():start()}});
+render();
+</script>
+</body>
+</html>

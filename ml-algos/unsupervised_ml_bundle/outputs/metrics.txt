@@ -1,0 +1,1 @@
+K-Means silhouette score (3000-row sample): 0.3790\nIsolation Forest predicted anomalies: 100 / 10000\n

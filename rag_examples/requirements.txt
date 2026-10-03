@@ -1,0 +1,5 @@
+langchain-core>=0.3
+langchain-ollama>=0.3
+langchain-postgres>=0.0.14
+psycopg[binary]>=3.2
+numpy>=2.0

@@ -1,0 +1,7 @@
+Go concurrency is built around goroutines and channels. A goroutine is a lightweight concurrent function managed by the Go runtime. Start one with the go keyword.
+
+Channels provide typed communication between goroutines. An unbuffered channel synchronizes sender and receiver. A buffered channel can hold a limited number of values before a sender blocks.
+
+The select statement lets a goroutine wait on multiple channel operations. sync.WaitGroup is commonly used to wait for a group of goroutines to finish. sync.Mutex protects shared state when message passing is not appropriate.
+
+A data race occurs when multiple goroutines access the same memory concurrently and at least one access is a write without adequate synchronization. Go includes a race detector that can be enabled with go test -race or go run -race.
