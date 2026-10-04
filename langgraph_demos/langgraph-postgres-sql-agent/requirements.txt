@@ -1,0 +1,5 @@
+langgraph
+langchain-core
+langchain-ollama
+psycopg[binary]
+python-dotenv

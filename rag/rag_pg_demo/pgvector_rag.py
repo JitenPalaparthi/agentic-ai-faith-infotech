@@ -11,7 +11,7 @@ COLLECTION = "go_concurrency_demo"
 
 
 def main():
-    question = " ".join(sys.argv[1:]) or "What is a goroutine?"
+    question = " ".join(sys.argv[1:]) or "What is a goroutine, is it fast?"
     embedder = embeddings()
 
     store = PGVector(

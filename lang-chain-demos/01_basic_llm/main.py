@@ -1,7 +1,9 @@
 from langchain_ollama import ChatOllama
 
 llm = ChatOllama(model="qwen3:0.6b", temperature=0)
-response = llm.invoke("Explain goroutines in Go in three simple bullet points. /no_think")
+response = llm.invoke(
+    "Explain goroutines in Go in three simple bullet points. /no_think"
+)
 print(response.content)
 print(type(response))
 print(response.content)
