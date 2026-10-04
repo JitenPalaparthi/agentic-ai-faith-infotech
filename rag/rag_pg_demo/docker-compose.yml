@@ -14,5 +14,17 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  pgweb:
+    image: sosedoff/pgweb:latest
+    restart: always
+    environment:
+      - DATABASE_URL=postgres://raguser:ragpass@postgres:5432/ragdb?sslmode=disable
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   pgdata:
